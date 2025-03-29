@@ -16,9 +16,14 @@ import {
 import { Loader2, PlusCircle, FileText, Download } from "lucide-react";
 import { useCVStore } from "@/store/cv-store";
 
+import { Tables } from "@/types/supabase";
+
+// We're using the Tables type from our supabase.ts types file
+type CVRecord = Tables<"cvs">;
+
 export default function DashboardPage() {
   const router = useRouter();
-  const [cvs, setCVs] = useState<any[]>([]);
+  const [cvs, setCVs] = useState<CVRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const { loadCV } = useCVStore();
 
