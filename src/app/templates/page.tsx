@@ -42,16 +42,15 @@ export default function TemplatesPage() {
             className="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
           >
             <div className="relative h-60 w-full">
+              {/* Use a placeholder image URL instead of onError */}
               <Image
-                src={template.image}
+                src={
+                  template.image ||
+                  "https://via.placeholder.com/300x400?text=Template+Preview"
+                }
                 alt={template.name}
                 fill
                 className="object-cover"
-                // Add this as a fallback if your images don't exist yet
-                onError={(e) => {
-                  e.currentTarget.src =
-                    "https://via.placeholder.com/300x400?text=Template+Preview";
-                }}
               />
             </div>
             <div className="p-6">

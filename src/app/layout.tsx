@@ -15,6 +15,11 @@ export const metadata: Metadata = {
   },
   description:
     "Create professional CVs for free in Georgian or English. Our CV maker helps Georgian job seekers build impressive resumes that stand out to employers.",
+  metadataBase: new URL(
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3000"
+      : "https://georgiacv.com"
+  ),
   keywords: [
     "CV maker",
     "Georgian CV",
