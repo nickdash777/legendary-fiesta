@@ -1,12 +1,13 @@
 "use client";
 
+import { Suspense } from "react";
 import { LoginForm } from "@/components/auth/login-form";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, CheckCircle } from "lucide-react";
 
-export default function LoginPage() {
+function LoginContent() {
   const searchParams = useSearchParams();
   const registered = searchParams.get("registered");
   const verified = searchParams.get("verified");
@@ -46,7 +47,7 @@ export default function LoginPage() {
 
         <div className="text-center">
           <p className="text-sm text-muted-foreground">
-            Dont have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link href="/register" className="text-primary hover:underline">
               Sign up
             </Link>
@@ -54,5 +55,24 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="container mx-auto py-10">
+          <div className="max-w-md mx-auto space-y-6">
+            <div className="text-center">
+              <h1 className="text-3xl font-bold">Log In</h1>
+              <p className="text-muted-foreground mt-2">Loading...</p>
+            </div>
+          </div>
+        </div>
+      }
+    >
+      <LoginContent />
+    </Suspense>
   );
 }
