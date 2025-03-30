@@ -3,19 +3,20 @@
 import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase/client";
+import { type EmailOtpType } from "@supabase/supabase-js";
 
 export default function AuthConfirm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token_hash = searchParams.get("token_hash");
-  const type = searchParams.get("type");
+  const type = searchParams.get("type") as EmailOtpType;
   const next = searchParams.get("next") ?? "/";
 
   useEffect(() => {
     async function handleConfirm() {
       if (token_hash && type) {
         const { error } = await supabase.auth.verifyOtp({
-          type: type as any,
+          type,
           token_hash,
         });
         if (!error) {
