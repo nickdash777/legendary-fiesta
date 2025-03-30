@@ -1,11 +1,12 @@
 "use client";
 
+import { Suspense } from "react";
 import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase/client";
 import { type EmailOtpType } from "@supabase/supabase-js";
 
-export default function AuthConfirm() {
+function ConfirmContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token_hash = searchParams.get("token_hash");
@@ -41,5 +42,24 @@ export default function AuthConfirm() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function AuthConfirm() {
+  return (
+    <Suspense
+      fallback={
+        <div className="container mx-auto py-10">
+          <div className="max-w-md mx-auto text-center">
+            <h1 className="text-3xl font-bold">Loading...</h1>
+            <p className="text-muted-foreground mt-2">
+              Please wait while we process your request.
+            </p>
+          </div>
+        </div>
+      }
+    >
+      <ConfirmContent />
+    </Suspense>
   );
 }
