@@ -57,17 +57,15 @@ export function RegisterForm() {
 
     try {
       // Register user with Supabase
-      const { error: signUpError, data: authData } = await supabase.auth.signUp(
-        {
-          email: data.email,
-          password: data.password,
-          options: {
-            data: {
-              full_name: data.fullName,
-            },
+      const { error: signUpError } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: {
+          data: {
+            full_name: data.fullName,
           },
-        }
-      );
+        },
+      });
 
       if (signUpError) throw signUpError;
 
