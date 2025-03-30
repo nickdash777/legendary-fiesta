@@ -1,8 +1,8 @@
-import { createClient } from "@/lib/supabase/server";
+"use client";
+
+import { supabase } from "@/lib/supabase/client";
 
 export async function login(formData: FormData) {
-  const supabase = await createClient();
-
   const { error } = await supabase.auth.signInWithPassword({
     email: formData.get("email") as string,
     password: formData.get("password") as string,
@@ -16,13 +16,11 @@ export async function login(formData: FormData) {
 }
 
 export async function signup(formData: FormData) {
-  const supabase = await createClient();
-
   const { error } = await supabase.auth.signUp({
     email: formData.get("email") as string,
     password: formData.get("password") as string,
     options: {
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/confirm`,
+      emailRedirectTo: `${window.location.origin}/auth/confirm`,
     },
   });
 

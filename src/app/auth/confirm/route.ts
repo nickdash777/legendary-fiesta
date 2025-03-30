@@ -22,5 +22,6 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  redirect("/error");
+  // If no token or error, redirect to home page
+  redirect("/");
 }
