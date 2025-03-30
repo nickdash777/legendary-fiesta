@@ -46,7 +46,10 @@ export function LoginForm() {
     setEmailConfirmationError(false);
 
     try {
-      const result = await login(new FormData(data));
+      const formData = new FormData();
+      formData.append("email", data.email);
+      formData.append("password", data.password);
+      const result = await login(formData);
 
       if (result.error) {
         if (result.error.includes("Email not confirmed")) {
@@ -59,7 +62,7 @@ export function LoginForm() {
 
       router.push("/dashboard");
       router.refresh();
-    } catch (err) {
+    } catch {
       setError("Failed to login");
     } finally {
       setIsLoading(false);
@@ -71,7 +74,10 @@ export function LoginForm() {
     setError(null);
 
     try {
-      const result = await signup(new FormData(data));
+      const formData = new FormData();
+      formData.append("email", data.email);
+      formData.append("password", data.password);
+      const result = await signup(formData);
 
       if (result.error) {
         setError(result.error);
@@ -79,7 +85,7 @@ export function LoginForm() {
       }
 
       router.push("/login?registered=true");
-    } catch (err) {
+    } catch {
       setError("Failed to sign up");
     } finally {
       setIsLoading(false);
