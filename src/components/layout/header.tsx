@@ -6,8 +6,13 @@ import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase";
 import { UserNav } from "./user-nav";
-import { Menu } from "lucide-react";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Menu, X } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetClose,
+} from "@/components/ui/sheet";
 
 export function Header() {
   const pathname = usePathname();
@@ -88,36 +93,44 @@ export function Header() {
                 <span className="sr-only">Toggle menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[260px] sm:w-[300px]">
-              <nav className="flex flex-col gap-4 mt-8">
+            <SheetContent side="right" className="w-[280px] sm:w-[350px] pt-10">
+              <div className="flex justify-end mb-8">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <X className="h-5 w-5" />
+                </Button>
+              </div>
+              <nav className="flex flex-col gap-6">
                 {navItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setIsMenuOpen(false)}
-                    className={`text-sm py-2 transition-colors hover:text-primary ${
-                      pathname === item.href
-                        ? "text-primary font-medium"
-                        : "text-muted-foreground"
-                    }`}
-                  >
-                    {item.name}
-                  </Link>
+                  <SheetClose asChild key={item.href}>
+                    <Link
+                      href={item.href}
+                      className={`text-base py-2 transition-colors hover:text-primary ${
+                        pathname === item.href
+                          ? "text-primary font-medium"
+                          : "text-muted-foreground"
+                      }`}
+                    >
+                      {item.name}
+                    </Link>
+                  </SheetClose>
                 ))}
 
-                <div className="border-t pt-4 mt-4">
+                <div className="border-t pt-6 mt-2">
                   {isLoggedIn ? (
                     <>
-                      <Link
-                        href="/dashboard"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        <Button variant="outline" className="w-full mb-2">
-                          Dashboard
-                        </Button>
-                      </Link>
+                      <SheetClose asChild>
+                        <Link href="/dashboard">
+                          <Button variant="outline" className="w-full mb-4">
+                            Dashboard
+                          </Button>
+                        </Link>
+                      </SheetClose>
                       <Button
-                        variant="ghost"
+                        variant="secondary"
                         className="w-full"
                         onClick={async () => {
                           await supabase.auth.signOut();
@@ -129,17 +142,18 @@ export function Header() {
                     </>
                   ) : (
                     <>
-                      <Link href="/login" onClick={() => setIsMenuOpen(false)}>
-                        <Button variant="outline" className="w-full mb-2">
-                          Log in
-                        </Button>
-                      </Link>
-                      <Link
-                        href="/register"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        <Button className="w-full">Sign up</Button>
-                      </Link>
+                      <SheetClose asChild>
+                        <Link href="/login">
+                          <Button variant="outline" className="w-full mb-4">
+                            Log in
+                          </Button>
+                        </Link>
+                      </SheetClose>
+                      <SheetClose asChild>
+                        <Link href="/register">
+                          <Button className="w-full">Sign up</Button>
+                        </Link>
+                      </SheetClose>
                     </>
                   )}
                 </div>

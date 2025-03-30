@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -17,6 +16,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Loader2, AlertCircle } from "lucide-react";
+import { login, signup } from "@/app/login/actions";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -28,6 +29,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 export function LoginForm() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const [emailConfirmationError, setEmailConfirmationError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<LoginFormValues>({
@@ -41,18 +43,44 @@ export function LoginForm() {
   async function onSubmit(data: LoginFormValues) {
     setIsLoading(true);
     setError(null);
+    setEmailConfirmationError(false);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email: data.email,
-        password: data.password,
-      });
+      const result = await login(new FormData(data));
 
-      if (error) throw error;
+      if (result.error) {
+        if (result.error.includes("Email not confirmed")) {
+          setEmailConfirmationError(true);
+        } else {
+          setError(result.error);
+        }
+        return;
+      }
+
       router.push("/dashboard");
       router.refresh();
-    } catch {
+    } catch (err) {
       setError("Failed to login");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function handleSignup(data: LoginFormValues) {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const result = await signup(new FormData(data));
+
+      if (result.error) {
+        setError(result.error);
+        return;
+      }
+
+      router.push("/login?registered=true");
+    } catch (err) {
+      setError("Failed to sign up");
     } finally {
       setIsLoading(false);
     }
@@ -62,9 +90,21 @@ export function LoginForm() {
     <div className="space-y-6">
       {error && (
         <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
+
+      {emailConfirmationError && (
+        <Alert className="bg-amber-50 border-amber-200">
+          <AlertCircle className="h-4 w-4 text-amber-600" />
+          <AlertDescription className="text-amber-700">
+            Your email address has not been confirmed yet. Please check your
+            inbox for the verification email.
+          </AlertDescription>
+        </Alert>
+      )}
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
@@ -93,9 +133,27 @@ export function LoginForm() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? "Logging in..." : "Login"}
-          </Button>
+          <div className="flex gap-4">
+            <Button type="submit" className="flex-1" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Logging in...
+                </>
+              ) : (
+                "Login"
+              )}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              className="flex-1"
+              disabled={isLoading}
+              onClick={form.handleSubmit(handleSignup)}
+            >
+              Sign up
+            </Button>
+          </div>
         </form>
       </Form>
     </div>

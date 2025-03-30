@@ -1,14 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CVForm } from "@/components/cv/cv-form";
 import { PDFRenderer } from "@/components/pdf/pdf-renderer";
 import { useCVStore } from "@/store/cv-store";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Loader2 } from "lucide-react";
 
 export default function CVBuilderPage() {
   const [activeTab, setActiveTab] = useState("edit");
+  const [isLoading, setIsLoading] = useState(true);
   const { cv, template } = useCVStore();
+
+  useEffect(() => {
+    // Simulate loading the CV data
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto py-20 flex flex-col items-center justify-center">
+        <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+        <p className="text-lg text-muted-foreground">Loading CV editor...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto py-8">

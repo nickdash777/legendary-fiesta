@@ -7,7 +7,7 @@ export default function HomePage() {
     <div className="container mx-auto px-4 py-12">
       {/* Hero Section */}
       <section className="py-16 md:py-24 text-center">
-        <h1 className="text-4xl md:text-6xl font-bold mb-6">
+        <h1 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight">
           Create Your Professional CV{" "}
           <span className="text-primary">For Free</span>
         </h1>
@@ -17,12 +17,16 @@ export default function HomePage() {
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-4">
           <Link href="/cv-builder">
-            <Button size="lg" className="px-8">
+            <Button size="lg" className="px-8 w-full sm:w-auto">
               Create My CV
             </Button>
           </Link>
           <Link href="/templates">
-            <Button size="lg" variant="outline" className="px-8">
+            <Button
+              size="lg"
+              variant="outline"
+              className="px-8 w-full sm:w-auto"
+            >
               View Templates
             </Button>
           </Link>

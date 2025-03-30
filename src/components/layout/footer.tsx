@@ -12,7 +12,7 @@ export function Footer() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-10">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-10">
           <div className="space-y-3">
             <h4 className="font-medium">Quick Links</h4>
             <ul className="space-y-2">

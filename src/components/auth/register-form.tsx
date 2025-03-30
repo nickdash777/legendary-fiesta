@@ -18,6 +18,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 const registerSchema = z
   .object({
@@ -35,6 +37,7 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export function RegisterForm() {
   const router = useRouter();
+
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -68,15 +71,9 @@ export function RegisterForm() {
 
       if (signUpError) throw signUpError;
 
-      // Create profile record
-      if (authData.user) {
-        const { error: profileError } = await supabase.from("profiles").insert({
-          id: authData.user.id,
-          full_name: data.fullName,
-        });
-
-        if (profileError) throw profileError;
-      }
+      toast.success("Registration successful!", {
+        description: "Please check your email to confirm your account.",
+      });
 
       router.push("/login?registered=true");
     } catch {
@@ -148,7 +145,14 @@ export function RegisterForm() {
             )}
           />
           <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? "Registering..." : "Register"}
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Registering...
+              </>
+            ) : (
+              "Register"
+            )}
           </Button>
         </form>
       </Form>
