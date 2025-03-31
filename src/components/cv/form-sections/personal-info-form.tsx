@@ -13,7 +13,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { PersonalInfo } from "@/types/cv";
@@ -79,7 +78,17 @@ export function PersonalInfoForm() {
               <FormItem>
                 <FormLabel>Full Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="John Doe" {...field} />
+                  <Input
+                    placeholder="John Doe"
+                    {...field}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      setPersonalInfo({
+                        ...form.getValues(),
+                        fullName: e.target.value,
+                      });
+                    }}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -93,7 +102,17 @@ export function PersonalInfoForm() {
               <FormItem>
                 <FormLabel>Job Title</FormLabel>
                 <FormControl>
-                  <Input placeholder="Software Developer" {...field} />
+                  <Input
+                    placeholder="Software Developer"
+                    {...field}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      setPersonalInfo({
+                        ...form.getValues(),
+                        jobTitle: e.target.value,
+                      });
+                    }}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -109,7 +128,17 @@ export function PersonalInfoForm() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="john@example.com" {...field} />
+                  <Input
+                    placeholder="john@example.com"
+                    {...field}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      setPersonalInfo({
+                        ...form.getValues(),
+                        email: e.target.value,
+                      });
+                    }}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -123,7 +152,17 @@ export function PersonalInfoForm() {
               <FormItem>
                 <FormLabel>Phone</FormLabel>
                 <FormControl>
-                  <Input placeholder="+995 555 12 34 56" {...field} />
+                  <Input
+                    placeholder="+995 555 12 34 56"
+                    {...field}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      setPersonalInfo({
+                        ...form.getValues(),
+                        phone: e.target.value,
+                      });
+                    }}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -138,7 +177,17 @@ export function PersonalInfoForm() {
             <FormItem>
               <FormLabel>Address</FormLabel>
               <FormControl>
-                <Input placeholder="Tbilisi, Georgia" {...field} />
+                <Input
+                  placeholder="Tbilisi, Georgia"
+                  {...field}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    setPersonalInfo({
+                      ...form.getValues(),
+                      address: e.target.value,
+                    });
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -175,7 +224,17 @@ export function PersonalInfoForm() {
               <FormItem>
                 <FormLabel>Website (Optional)</FormLabel>
                 <FormControl>
-                  <Input placeholder="https://yourwebsite.com" {...field} />
+                  <Input
+                    placeholder="https://yourwebsite.com"
+                    {...field}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      setPersonalInfo({
+                        ...form.getValues(),
+                        website: e.target.value,
+                      });
+                    }}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -192,6 +251,13 @@ export function PersonalInfoForm() {
                   <Input
                     placeholder="https://linkedin.com/in/username"
                     {...field}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      setPersonalInfo({
+                        ...form.getValues(),
+                        linkedin: e.target.value,
+                      });
+                    }}
                   />
                 </FormControl>
                 <FormMessage />
@@ -199,8 +265,6 @@ export function PersonalInfoForm() {
             )}
           />
         </div>
-
-        <Button type="submit">Save Personal Information</Button>
       </form>
     </Form>
   );

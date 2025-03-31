@@ -60,7 +60,14 @@ export function SummaryForm() {
             <FormItem>
               <FormLabel>CV Title</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="My Professional CV" />
+                <Input
+                  {...field}
+                  placeholder="My Professional CV"
+                  onChange={(e) => {
+                    field.onChange(e);
+                    setTitle(e.target.value);
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -77,6 +84,7 @@ export function SummaryForm() {
                 value={field.value}
                 onValueChange={(value) => {
                   field.onChange(value);
+                  setTemplate(value as "classic" | "modern" | "professional");
                 }}
               >
                 <FormControl>
@@ -106,6 +114,10 @@ export function SummaryForm() {
                   {...field}
                   placeholder="Write a brief summary of your professional experience, skills, and career goals..."
                   rows={6}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    setSummary(e.target.value);
+                  }}
                 />
               </FormControl>
               <FormMessage />
@@ -116,8 +128,6 @@ export function SummaryForm() {
             </FormItem>
           )}
         />
-
-        <Button type="submit">Save Summary</Button>
       </form>
     </Form>
   );
