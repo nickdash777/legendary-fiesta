@@ -169,7 +169,7 @@ export default function HomePage() {
             <div className="flex items-center mb-4">
               <div className="w-12 h-12 bg-gray-200 rounded-full overflow-hidden mr-4">
                 <Image
-                  src="/images/testimonial-1.jpg"
+                  src="/images/girl.png"
                   alt="მომხმარებლის ავატარი"
                   width={48}
                   height={48}
@@ -192,7 +192,7 @@ export default function HomePage() {
             <div className="flex items-center mb-4">
               <div className="w-12 h-12 bg-gray-200 rounded-full overflow-hidden mr-4">
                 <Image
-                  src="/images/testimonial-2.jpg"
+                  src="/images/boy.png"
                   alt="მომხმარებლის ავატარი"
                   width={48}
                   height={48}
