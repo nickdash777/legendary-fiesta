@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase";
@@ -39,10 +40,12 @@ export function Header() {
   }, []);
 
   const navItems = [
-    { name: "Home", href: "/" },
-    { name: "Create CV", href: "/cv-builder" },
-    { name: "Templates", href: "/templates" },
-    { name: "About", href: "/about" },
+    { name: "მთავარი", href: "/" },
+    { name: "CV შექმნა", href: "/cv-builder" },
+    { name: "შაბლონები", href: "/templates" },
+    { name: "კარიერის რჩევები", href: "/career-tips" },
+    { name: "FAQ", href: "/faq" },
+    { name: "ჩვენ შესახებ", href: "/about" },
   ];
 
   return (
@@ -50,7 +53,13 @@ export function Header() {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-6">
           <Link href="/" className="font-bold text-2xl">
-            GeorgiaCV
+            <Image
+              src="/logo.svg"
+              alt="GeorgiaCV Logo"
+              width={120}
+              height={32}
+              priority
+            />
           </Link>
 
           <nav className="hidden md:flex items-center gap-6">
@@ -78,10 +87,10 @@ export function Header() {
           ) : (
             <div className="hidden md:flex items-center gap-4">
               <Link href="/login">
-                <Button variant="ghost">Log in</Button>
+                <Button variant="ghost">შესვლა</Button>
               </Link>
               <Link href="/register">
-                <Button>Sign up</Button>
+                <Button>რეგისტრაცია</Button>
               </Link>
             </div>
           )}
