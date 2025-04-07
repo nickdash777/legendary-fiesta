@@ -92,14 +92,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ka">
-      <body>
-        <LoadingProvider>
-          <div className="min-h-screen flex flex-col">
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
-        </LoadingProvider>
+      <body className={inter.className}>
+        <SupabaseProvider>
+          <LoadingProvider>
+            <div className="min-h-screen flex flex-col">
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </div>
+            <Toaster />
+          </LoadingProvider>
+        </SupabaseProvider>
       </body>
     </html>
   );
