@@ -5,6 +5,7 @@ import { SupabaseProvider } from "@/providers/supabase-provider";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { Toaster } from "@/components/ui/sonner";
+import { LoadingProvider } from "@/components/layout/loading-provider";
 
 const inter = Inter({ subsets: ["latin", "latin-ext"] });
 
@@ -90,16 +91,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
-        <SupabaseProvider>
-          <div className="flex flex-col min-h-screen">
+    <html lang="ka">
+      <body>
+        <LoadingProvider>
+          <div className="min-h-screen flex flex-col">
             <Header />
             <main className="flex-1">{children}</main>
             <Footer />
           </div>
-          <Toaster />
-        </SupabaseProvider>
+        </LoadingProvider>
       </body>
     </html>
   );
