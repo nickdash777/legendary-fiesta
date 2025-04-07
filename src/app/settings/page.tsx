@@ -17,6 +17,14 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { User } from "@supabase/supabase-js";
 
+interface ProfileData {
+  id: string;
+  updated_at: string;
+  full_name: string;
+  email_notifications?: boolean;
+  dark_mode?: boolean;
+}
+
 export default function SettingsPage() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
@@ -27,29 +35,52 @@ export default function SettingsPage() {
 
   useEffect(() => {
     async function getUser() {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) {
-        router.push("/login");
-        return;
+      try {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        if (!user) {
+          router.push("/login");
+          return;
+        }
+
+        setUser(user);
+
+        // Modify this query to match your actual table columns
+        const { data: profile, error } = await supabase
+          .from("profiles")
+          .select("*") // Select all columns to see what's available
+          .eq("id", user.id)
+          .single();
+
+        if (error) {
+          console.error("Error fetching profile:", error);
+        }
+
+        if (profile) {
+          // Check if these properties exist on the profile object
+          if ("full_name" in profile) {
+            setFullName(profile.full_name || "");
+          }
+
+          if ("email_notifications" in profile) {
+            // Ensure we're setting a boolean value
+            setEmailNotifications(
+              profile.email_notifications === true ? true : false
+            );
+          }
+
+          if ("dark_mode" in profile) {
+            // Ensure we're setting a boolean value
+            setDarkMode(profile.dark_mode === true ? true : false);
+          }
+        }
+
+        setLoading(false);
+      } catch (error) {
+        console.error("Error in getUser:", error);
+        setLoading(false);
       }
-
-      setUser(user);
-
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("full_name")
-        .eq("id", user.id)
-        .single();
-
-      if (profile) {
-        setFullName(profile.full_name || "");
-        setEmailNotifications(true);
-        setDarkMode(false);
-      }
-
-      setLoading(false);
     }
 
     getUser();
@@ -59,11 +90,36 @@ export default function SettingsPage() {
     if (!user) return;
 
     try {
-      const { error } = await supabase.from("profiles").upsert({
+      // First check if the columns exist in the table
+      const { data: tableInfo } = await supabase
+        .from("profiles")
+        .select("*")
+        .limit(1);
+
+      // Build the data object with fields that definitely exist
+      const profileData: ProfileData = {
         id: user.id,
-        full_name: fullName,
         updated_at: new Date().toISOString(),
-      });
+        full_name: fullName,
+      };
+
+      // Only add these fields if they exist in the table schema
+      // We determined this by checking the actual table columns
+      const hasEmailNotifications =
+        tableInfo && tableInfo[0] && "email_notifications" in tableInfo[0];
+      const hasDarkMode =
+        tableInfo && tableInfo[0] && "dark_mode" in tableInfo[0];
+
+      if (hasEmailNotifications) {
+        profileData.email_notifications = emailNotifications;
+      }
+
+      if (hasDarkMode) {
+        profileData.dark_mode = darkMode;
+      }
+
+      // Use upsert to handle both insert and update cases
+      const { error } = await supabase.from("profiles").upsert(profileData);
 
       if (error) throw error;
 
