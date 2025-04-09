@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -97,18 +97,23 @@ export default function TemplatePreview({ templateId }: TemplatePreviewProps) {
   const router = useRouter();
   const { startLoading, stopLoading } = useLoading();
   const [mounted, setMounted] = useState(false);
+  const loadingHandled = useRef(false);
 
   useEffect(() => {
     setMounted(true);
-    startLoading();
 
-    // Stop loading after PDF is likely rendered
-    const timer = setTimeout(() => {
-      stopLoading();
-    }, 2000);
+    // Only run loading logic once per component mount
+    if (!loadingHandled.current) {
+      startLoading();
 
-    return () => clearTimeout(timer);
-  }, [startLoading, stopLoading]);
+      const timer = setTimeout(() => {
+        stopLoading();
+        loadingHandled.current = true;
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, []); // Empty dependency array to run only once on mount
 
   const handleUseTemplate = () => {
     startLoading();

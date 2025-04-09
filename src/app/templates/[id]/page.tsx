@@ -13,7 +13,10 @@ export function generateStaticParams() {
 }
 
 // Generate metadata for the page
-export function generateMetadata({ params }: { params: { id: string } }) {
+export async function generateMetadata({ params }: { params: { id: string } }) {
+  // Ensure params is resolved
+  const resolvedParams = await Promise.resolve(params);
+
   const templateNames: Record<string, string> = {
     classic: "კლასიკური შაბლონი",
     modern: "თანამედროვე შაბლონი",
@@ -23,7 +26,8 @@ export function generateMetadata({ params }: { params: { id: string } }) {
     executive: "ხელმძღვანელის შაბლონი",
   };
 
-  const templateName = templateNames[params.id] || "CV შაბლონი";
+  const templateId = resolvedParams.id;
+  const templateName = templateNames[templateId] || "CV შაბლონი";
 
   return {
     title: templateName,
@@ -31,11 +35,15 @@ export function generateMetadata({ params }: { params: { id: string } }) {
   };
 }
 
-// Server component that passes the templateId to the client component
-export default function TemplatePreviewPage({
+// Server component
+export default async function TemplatePreviewPage({
   params,
 }: {
   params: { id: string };
 }) {
-  return <TemplatePreview templateId={params.id} />;
+  // Ensure params is resolved
+  const resolvedParams = await Promise.resolve(params);
+  const templateId = resolvedParams.id;
+
+  return <TemplatePreview templateId={templateId} />;
 }
