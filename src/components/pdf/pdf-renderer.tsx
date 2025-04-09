@@ -1,57 +1,23 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
+import React from "react";
 import { CVDocument } from "./document";
+import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer";
 import { Button } from "@/components/ui/button";
+import { Download } from "lucide-react";
+import { CVTemplate } from "@/types/cv";
 import { CV } from "@/types/cv";
-import { Loader2 } from "lucide-react";
 
-interface PDFRendererProps {
+export interface PDFRendererProps {
   cv: CV;
-  template: "classic" | "modern" | "professional";
-  fileName?: string;
+  template: CVTemplate;
+  fileName: string;
 }
 
-export function PDFRenderer({
-  cv,
-  template,
-  fileName = "cv.pdf",
-}: PDFRendererProps) {
-  const [isClient, setIsClient] = useState(false);
-  const [isRendering, setIsRendering] = useState(true);
-
-  // This ensures this component only renders on the client
-  // since react-pdf requires browser APIs
-  useEffect(() => {
-    setIsClient(true);
-    // Add a small delay to simulate PDF rendering
-    const timer = setTimeout(() => {
-      setIsRendering(false);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (!isClient || isRendering) {
-    return (
-      <div className="h-[calc(100vh-200px)] w-full border rounded-md flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
-          <p className="text-muted-foreground">Preparing your CV preview...</p>
-        </div>
-      </div>
-    );
-  }
-
+// Keep only the PDF renderer component here
+export function PDFRenderer({ cv, template, fileName }: PDFRendererProps) {
   return (
-    <div className="space-y-4">
-      <div className="h-[calc(100vh-200px)] w-full border rounded-md overflow-hidden">
-        <PDFViewer width="100%" height="100%" style={{ border: "none" }}>
-          <CVDocument cv={cv} template={template} />
-        </PDFViewer>
-      </div>
-
+    <div className="space-y-4 h-full">
       <div className="flex justify-end">
         <PDFDownloadLink
           document={<CVDocument cv={cv} template={template} />}
@@ -59,17 +25,24 @@ export function PDFRenderer({
         >
           {({ loading }) => (
             <Button disabled={loading}>
-              {loading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Preparing document...
-                </>
-              ) : (
-                "Download PDF"
-              )}
+              <Download className="mr-2 h-4 w-4" />
+              {loading ? "Generating PDF..." : "Download PDF"}
             </Button>
           )}
         </PDFDownloadLink>
+      </div>
+
+      <div className="h-[calc(100%-48px)]">
+        <PDFViewer
+          style={{
+            width: "100%",
+            height: "100%",
+            border: "1px solid #e2e8f0",
+            borderRadius: "0.375rem",
+          }}
+        >
+          <CVDocument cv={cv} template={template} />
+        </PDFViewer>
       </div>
     </div>
   );

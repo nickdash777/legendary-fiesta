@@ -1,10 +1,20 @@
-import { StyleSheet } from "@react-pdf/renderer";
+import { StyleSheet, Font } from "@react-pdf/renderer";
+
+Font.register({
+  family: "NotoSansGeorgian",
+  src: "/fonts/bpg_extrasquare_mtavruli_2009.ttf",
+});
+
+Font.register({
+  family: "BPGPhoneSansItalic",
+  src: "/fonts/bpg_phone_sans_italic.ttf",
+});
 
 export const styles = StyleSheet.create({
   // Classic Template Styles
   page: {
     padding: 30,
-    fontFamily: "Helvetica",
+    fontFamily: "NotoSansGeorgian",
     fontSize: 12,
     lineHeight: 1.5,
     color: "#333",
@@ -77,7 +87,7 @@ export const styles = StyleSheet.create({
   itemSubtitle: {
     fontSize: 11,
     marginBottom: 3,
-    fontStyle: "italic",
+    fontFamily: "BPGPhoneSansItalic",
   },
   itemDescription: {
     fontSize: 10,
@@ -136,7 +146,7 @@ export const styles = StyleSheet.create({
   // Modern Template Styles
   modernPage: {
     flexDirection: "row",
-    fontFamily: "Helvetica",
+    fontFamily: "NotoSansGeorgian",
     fontSize: 12,
     color: "#333",
   },
@@ -281,7 +291,7 @@ export const styles = StyleSheet.create({
   // Professional Template Styles
   professionalPage: {
     padding: 30,
-    fontFamily: "Helvetica",
+    fontFamily: "NotoSansGeorgian",
     fontSize: 12,
     color: "#333",
     backgroundColor: "#ffffff",
@@ -369,7 +379,7 @@ export const styles = StyleSheet.create({
   },
   professionalExperienceCompany: {
     fontSize: 12,
-    fontStyle: "italic",
+    fontFamily: "BPGPhoneSansItalic",
     color: "#334155",
   },
   professionalExperiencePeriod: {
@@ -396,7 +406,7 @@ export const styles = StyleSheet.create({
   },
   professionalEducationInstitution: {
     fontSize: 12,
-    fontStyle: "italic",
+    fontFamily: "BPGPhoneSansItalic",
     color: "#334155",
   },
   professionalEducationPeriod: {
