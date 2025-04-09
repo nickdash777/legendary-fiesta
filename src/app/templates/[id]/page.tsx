@@ -15,7 +15,7 @@ export function generateStaticParams() {
 // Generate metadata for the page
 export async function generateMetadata({ params }: { params: { id: string } }) {
   // Ensure params is resolved
-  const resolvedParams = await Promise.resolve(params);
+  const templateId = params.id;
 
   const templateNames: Record<string, string> = {
     classic: "კლასიკური შაბლონი",
@@ -26,7 +26,6 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
     executive: "ხელმძღვანელის შაბლონი",
   };
 
-  const templateId = resolvedParams.id;
   const templateName = templateNames[templateId] || "CV შაბლონი";
 
   return {
