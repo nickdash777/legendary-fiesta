@@ -35,15 +35,12 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
   };
 }
 
-// Server component
-export default async function TemplatePreviewPage({
+// Alternative approach
+export default function TemplatePreviewPage({
   params,
 }: {
   params: { id: string };
 }) {
-  // Ensure params is resolved
-  const resolvedParams = await Promise.resolve(params);
-  const templateId = resolvedParams.id;
-
+  const templateId = params.id;
   return <TemplatePreview templateId={templateId} />;
 }
