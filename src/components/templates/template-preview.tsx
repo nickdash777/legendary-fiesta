@@ -11,7 +11,7 @@ import { CVTemplate, CV } from "@/types/cv";
 // Sample CV data for preview only
 const SAMPLE_CV: CV = {
   personalInfo: {
-    fullName: "გიორგი მაისურაძე",
+    fullName: "გიორგი 2 მაისურაძე",
     jobTitle: "პროგრამული უზრუნველყოფის ინჟინერი",
     email: "giorgi.maisuradze@example.com",
     phone: "+995 555 12 34 56",
