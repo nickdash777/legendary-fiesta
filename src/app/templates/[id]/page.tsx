@@ -13,9 +13,13 @@ export function generateStaticParams() {
 }
 
 // Generate metadata for the page
-export async function generateMetadata({ params }: { params: { id: string } }) {
-  // Ensure params is resolved
-  const templateId = params.id;
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const resolvedParams = await params; // Await the params Promise
+  const templateId = resolvedParams.id;
 
   const templateNames: Record<string, string> = {
     classic: "კლასიკური შაბლონი",
@@ -34,12 +38,13 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
   };
 }
 
-// Alternative approach
-export default function TemplatePreviewPage({
+// Page component
+export default async function TemplatePreviewPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>; // Type params as a Promise
 }) {
-  const templateId = params.id;
+  const resolvedParams = await params; // Await the params Promise
+  const templateId = resolvedParams.id;
   return <TemplatePreview templateId={templateId} />;
 }
