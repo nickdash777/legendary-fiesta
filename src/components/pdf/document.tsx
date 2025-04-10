@@ -5,7 +5,13 @@ import { styles } from "@/styles/pdf-styles";
 
 interface CVDocumentProps {
   cv: CV;
-  template: "classic" | "modern" | "professional";
+  template:
+    | "classic"
+    | "modern"
+    | "professional"
+    | "creative"
+    | "minimal"
+    | "executive";
 }
 
 export const CVDocument: React.FC<CVDocumentProps> = ({ cv, template }) => {
