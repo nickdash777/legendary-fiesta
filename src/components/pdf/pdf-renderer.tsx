@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { CVDocument } from "./document";
 import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer";
 import { Button } from "@/components/ui/button";
@@ -14,8 +14,17 @@ export interface PDFRendererProps {
   fileName: string;
 }
 
-// Keep only the PDF renderer component here
 export function PDFRenderer({ cv, template, fileName }: PDFRendererProps) {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return <div>Loading PDF preview...</div>;
+  }
+
   return (
     <div className="space-y-4 h-full">
       <div className="flex justify-end">

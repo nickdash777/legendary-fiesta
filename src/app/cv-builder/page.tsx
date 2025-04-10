@@ -1,57 +1,31 @@
-"use client";
+import ClientCVBuilder from "./ClientCVBuilder";
 
-import { useEffect } from "react";
-import { useSearchParams } from "next/navigation";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CVForm } from "@/components/cv/cv-form";
-import { PDFRenderer } from "@/components/pdf/pdf-renderer";
-import { useCVStore } from "@/store/cv-store";
-import { CVTemplate } from "@/types/cv";
+// Static metadata for SEO
+export const metadata = {
+  title: "CV Builder - Create Your Professional Resume",
+  description:
+    "Build a professional CV with our free online CV builder. Choose from modern, classic, and creative templates to create your resume in minutes.",
+  keywords: "CV builder, resume maker, professional CV, free CV templates",
+};
 
+// Static page with no reliance on searchParams
 export default function CVBuilderPage() {
-  const searchParams = useSearchParams();
-  const templateParam = searchParams.get("template");
-  const { cv, template, setTemplate } = useCVStore(); // Get template from store
-
-  // Apply the template selection when the component mounts or template param changes
-  useEffect(() => {
-    if (templateParam) {
-      const validTemplates: CVTemplate[] = [
-        "classic",
-        "modern",
-        "professional",
-        "creative",
-        "minimal",
-        "executive",
-      ];
-
-      if (validTemplates.includes(templateParam as CVTemplate)) {
-        setTemplate(templateParam as CVTemplate);
-        console.log(`Template set to: ${templateParam}`);
-      }
-    }
-  }, [templateParam, setTemplate]);
+  const defaultTemplate = "modern"; // Hardcode default for static rendering
 
   return (
     <div className="container mx-auto py-10">
-      <Tabs defaultValue="edit" className="space-y-6">
-        <TabsList className="grid w-full max-w-md mx-auto grid-cols-2">
-          <TabsTrigger value="edit">Edit</TabsTrigger>
-          <TabsTrigger value="preview">Preview</TabsTrigger>
-        </TabsList>
+      {/* Static SEO content */}
+      <section className="mb-10">
+        <h1 className="text-3xl font-bold">CV Builder</h1>
+        <p className="text-lg mt-2">
+          Create a standout resume with our free CV builder. Select from
+          professional templates like {defaultTemplate} and customize your CV
+          effortlessly.
+        </p>
+      </section>
 
-        <TabsContent value="edit" className="mt-6">
-          <CVForm />
-        </TabsContent>
-
-        <TabsContent value="preview" className="mt-6">
-          <PDFRenderer
-            cv={cv}
-            template={template} // Use the template from the store
-            fileName={`${cv.personalInfo.fullName || "My"}_CV.pdf`}
-          />
-        </TabsContent>
-      </Tabs>
+      {/* Dynamic client-side component */}
+      <ClientCVBuilder initialTemplate={defaultTemplate} />
     </div>
   );
 }
