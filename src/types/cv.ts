@@ -56,7 +56,13 @@ export interface CV {
   summary?: string;
 }
 
-export type CVTemplate = "classic" | "modern" | "professional";
+export type CVTemplate =
+  | "classic"
+  | "modern"
+  | "professional"
+  | "creative"
+  | "minimal"
+  | "executive";
 
 export interface SavedCV {
   id: string;

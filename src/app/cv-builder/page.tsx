@@ -11,13 +11,12 @@ import { CVTemplate } from "@/types/cv";
 export default function CVBuilderPage() {
   const searchParams = useSearchParams();
   const templateParam = searchParams.get("template");
-  const { cv, setTemplate } = useCVStore();
+  const { cv, template, setTemplate } = useCVStore(); // Get template from store
 
   // Apply the template selection when the component mounts or template param changes
   useEffect(() => {
     if (templateParam) {
-      // Make sure the template parameter is a valid CVTemplate
-      const validTemplates = [
+      const validTemplates: CVTemplate[] = [
         "classic",
         "modern",
         "professional",
@@ -26,8 +25,7 @@ export default function CVBuilderPage() {
         "executive",
       ];
 
-      if (validTemplates.includes(templateParam)) {
-        // Set the template in the store
+      if (validTemplates.includes(templateParam as CVTemplate)) {
         setTemplate(templateParam as CVTemplate);
         console.log(`Template set to: ${templateParam}`);
       }
@@ -49,7 +47,7 @@ export default function CVBuilderPage() {
         <TabsContent value="preview" className="mt-6">
           <PDFRenderer
             cv={cv}
-            template={templateParam} // Use the templateParam from URL params here
+            template={template} // Use the template from the store
             fileName={`${cv.personalInfo.fullName || "My"}_CV.pdf`}
           />
         </TabsContent>
