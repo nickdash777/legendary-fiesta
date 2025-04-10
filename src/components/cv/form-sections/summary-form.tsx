@@ -25,7 +25,14 @@ import {
 const formSchema = z.object({
   summary: z.string().optional(),
   title: z.string().min(1, "CV title is required"),
-  template: z.enum(["classic", "modern", "professional"]),
+  template: z.enum([
+    "classic",
+    "modern",
+    "professional",
+    "creative",
+    "minimal",
+    "executive",
+  ]),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -83,7 +90,15 @@ export function SummaryForm() {
                 value={field.value}
                 onValueChange={(value) => {
                   field.onChange(value);
-                  setTemplate(value as "classic" | "modern" | "professional");
+                  setTemplate(
+                    value as
+                      | "classic"
+                      | "modern"
+                      | "professional"
+                      | "creative"
+                      | "minimal"
+                      | "executive"
+                  );
                 }}
               >
                 <FormControl>
