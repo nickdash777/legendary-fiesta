@@ -6,20 +6,31 @@ import { PDFRenderer } from "@/components/pdf/pdf-renderer";
 import { useCVStore } from "@/store/cv-store";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2 } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
 export default function CVBuilderPage() {
   const [activeTab, setActiveTab] = useState("edit");
   const [isLoading, setIsLoading] = useState(true);
-  const { cv, template } = useCVStore();
+  const { cv, template, setTemplate } = useCVStore();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
+    // Check for template parameter in URL
+    const templateParam = searchParams.get("template");
+    if (
+      templateParam &&
+      ["classic", "modern", "professional"].includes(templateParam)
+    ) {
+      setTemplate(templateParam as "classic" | "modern" | "professional");
+    }
+
     // Simulate loading the CV data
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 500);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [searchParams, setTemplate]);
 
   if (isLoading) {
     return (
